@@ -62,9 +62,9 @@ export default function PropertyDetail() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   // FECHAS Y HUÉSPEDES
-  const [checkIn, setCheckIn] = useState<string>("2026-09-16");
-  const [checkOut, setCheckOut] = useState<string>("2026-09-30");
-  const [guests, setGuests] = useState<string>("16 huéspedes");
+  const [checkIn, setCheckIn] = useState<string>("2026-10-13");
+  const [checkOut, setCheckOut] = useState<string>("2026-10-18");
+  const [guests, setGuests] = useState<string>("6 huéspedes");
 
   // CÁLCULO DE NOCHES Y PRECIOS
   const nightsCount = useMemo(() => {
@@ -144,16 +144,16 @@ export default function PropertyDetail() {
   const propertiesData: Record<string, PropertyDetailData> = {
     "1": {
       title: "Jarabacoa Mountain Village",
-      subtitle: "Alojamiento entero: villa en Jarabacoa, República Dominicana",
+      subtitle: "Alojamiento entero: residencia en Jarabacoa, República Dominicana",
       location: "Jarabacoa, La Vega, República Dominicana",
       lat: 19.1211,
       lng: -70.6161,
-      specs: "Más de 16 huéspedes · 7 habitaciones · 12 camas · 7 baños",
-      rating: "4.73",
-      reviewsCount: "128",
-      price: "$700 USD",
-      rawPrice: 700,
-      originalPrice: "$900 USD",
+      specs: "6 huéspedes · 3 habitaciones · 3 camas · 2.5 baños",
+      rating: "4.9",
+      reviewsCount: "116",
+      price: "$1,758 USD",
+      rawPrice: 1758,
+      originalPrice: "$2,000 USD",
       badge: "Favorito entre huéspedes",
       images: [
         "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200",
@@ -168,8 +168,8 @@ export default function PropertyDetail() {
       hostExp: "Anfitrión · 4 años en Airbnb",
       hostAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200",
       hostType: "Superanfitrión",
-      hostReviews: "128",
-      hostRating: "4.73",
+      hostReviews: "116",
+      hostRating: "4.9",
       hostYears: "4 años",
       hostLocation: "Jarabacoa, República Dominicana",
       cohosts: [
@@ -287,11 +287,11 @@ export default function PropertyDetail() {
   const property: PropertyDetailData = realProperty
     ? {
         title: realProperty.title || defaultProperty.title,
-        subtitle: `Alojamiento entero: en ${realProperty.location_name || realProperty.location || "República Dominicana"}`,
+        subtitle: `Alojamiento entero: residencia en ${realProperty.location_name || realProperty.location || "República Dominicana"}`,
         location: realProperty.location_name || realProperty.location || defaultProperty.location,
         lat: realProperty.latitude || realProperty.lat || defaultProperty.lat,
         lng: realProperty.longitude || realProperty.lng || defaultProperty.lng,
-        specs: `Más de ${realProperty.guests_max || realProperty.guests || 16} huéspedes · ${realProperty.bedrooms || 7} habitaciones · ${realProperty.beds || 12} camas · ${realProperty.bathrooms || 7} baños`,
+        specs: `${realProperty.guests_max || realProperty.guests || 6} huéspedes · ${realProperty.bedrooms || 3} habitaciones · ${realProperty.beds || 3} camas · ${realProperty.bathrooms || 2.5} baños`,
         rating: realProperty.rating ? String(realProperty.rating) : defaultProperty.rating,
         reviewsCount: defaultProperty.reviewsCount,
         price: `$${rawPriceVal.toLocaleString("en-US")} USD`,
@@ -318,7 +318,7 @@ export default function PropertyDetail() {
       }
     : defaultProperty;
 
-  // CONJUNTOS DE FECHAS BLOQUEADAS (NORMALIZADO PARA DIAS INDIVIDUALES Y RANGOS)
+  // CONJUNTOS DE FECHAS BLOQUEADAS
   const disabledDatesSet = useMemo(() => {
     const set = new Set<string>();
     const rawBlocked = property.blocked_dates || [];
@@ -485,10 +485,10 @@ export default function PropertyDetail() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-[#222222] font-sans antialiased selection:bg-[#FF385C] selection:text-white relative pb-20 lg:pb-0">
+    <main className="min-h-screen bg-white text-[#222222] font-sans antialiased selection:bg-[#FF385C] selection:text-white relative pb-28 lg:pb-0">
       {/* NOTIFICACIÓN AL COPIAR ENLACE */}
       {showShareToast && (
-        <div className="fixed bottom-20 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
+        <div className="fixed bottom-24 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
           <span>🔗</span> ¡Enlace copiado al portapapeles!
         </div>
       )}
@@ -627,8 +627,8 @@ export default function PropertyDetail() {
         </div>
       )}
 
-      {/* HEADER PRINCIPAL */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 px-6 sm:px-10 py-4 flex items-center justify-between max-w-[1280px] mx-auto w-full">
+      {/* HEADER PRINCIPAL (DESKTOP SOLO) */}
+      <header className="hidden md:flex sticky top-0 z-40 bg-white border-b border-gray-200 px-6 sm:px-10 py-4 items-center justify-between max-w-[1280px] mx-auto w-full">
         <div
           onClick={handleRedirectToAirbnb}
           className="cursor-pointer flex items-center gap-2"
@@ -643,7 +643,7 @@ export default function PropertyDetail() {
         {/* Buscador central */}
         <div
           onClick={handleRedirectToAirbnb}
-          className="hidden md:flex items-center border border-gray-300 rounded-full py-2 px-4 shadow-sm hover:shadow-md transition cursor-pointer bg-white gap-3 text-xs font-medium"
+          className="flex items-center border border-gray-300 rounded-full py-2 px-4 shadow-sm hover:shadow-md transition cursor-pointer bg-white gap-3 text-xs font-medium"
         >
           <span className="px-2 border-r border-gray-200 font-semibold text-gray-800">
             En cualquier lugar del mundo
@@ -732,10 +732,84 @@ export default function PropertyDetail() {
         </div>
       )}
 
+      {/* GALERÍA COLLAGE / FOTO PRINCIPAL MÓVIL EXACTA A AIRBNB */}
+      <div
+        id="fotos"
+        className="relative w-full h-[320px] sm:h-[380px] md:h-[420px] md:max-w-[1120px] md:mx-auto md:px-6 md:pt-6 md:rounded-2xl overflow-hidden"
+      >
+        {/* MÓVIL: BOTONES FLOTANTES SUPERIORES SOBRE LA FOTO */}
+        <div className="md:hidden absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-auto">
+          <button
+            onClick={() => handleRedirectToAirbnb()}
+            className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black font-bold shadow-md active:scale-95 transition"
+          >
+            ←
+          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleShare}
+              className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black shadow-md active:scale-95 transition text-sm"
+            >
+              ⇧
+            </button>
+            <button
+              onClick={handleToggleSave}
+              className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black shadow-md active:scale-95 transition text-sm"
+            >
+              <span className={isSaved ? "text-[#FF385C]" : ""}>{isSaved ? "❤️" : "♡"}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* MÓVIL: Imagen principal que ocupa 100% borde a borde */}
+        <div
+          className="w-full h-full cursor-pointer md:hidden relative"
+          onClick={() => setShowGalleryModal(true)}
+        >
+          <img
+            src={property.images[0]}
+            alt="Principal"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md">
+            1 / {property.images.length}
+          </div>
+        </div>
+
+        {/* DESKTOP: Grilla de 4 columnas */}
+        <div className="hidden md:grid grid-cols-4 gap-2 h-full rounded-2xl overflow-hidden">
+          <div className="col-span-2 h-full cursor-pointer" onClick={() => setShowGalleryModal(true)}>
+            <img
+              src={property.images[0]}
+              alt="Principal"
+              className="w-full h-full object-cover hover:brightness-95 transition"
+            />
+          </div>
+          <div className="col-span-2 grid grid-cols-2 gap-2 h-full">
+            {property.images.slice(1, 5).map((img, i) => (
+              <div key={i} className="h-[206px] cursor-pointer" onClick={() => setShowGalleryModal(true)}>
+                <img
+                  src={img}
+                  alt={`Vista ${i}`}
+                  className="w-full h-full object-cover hover:brightness-95 transition"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowGalleryModal(true)}
+          className="hidden md:flex absolute bottom-8 right-10 bg-white/90 backdrop-blur-md border border-black text-black font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm hover:bg-white transition items-center gap-2"
+        >
+          <span>⊞</span> Mostrar todas las fotos
+        </button>
+      </div>
+
       {/* CONTENIDO PRINCIPAL */}
       <div className="max-w-[1120px] mx-auto px-6 pt-6">
-        {/* TITULO Y ACCIONES */}
-        <div className="flex justify-between items-start mb-4">
+        {/* TITULO Y ACCIONES DESKTOP */}
+        <div className="hidden md:flex justify-between items-start mb-4">
           <h1 className="text-2xl sm:text-[26px] font-semibold text-[#222222] tracking-tight">
             {property.title}
           </h1>
@@ -756,65 +830,20 @@ export default function PropertyDetail() {
           </div>
         </div>
 
-        {/* GALERÍA COLLAGE (OPTIMIZADA MÓVIL) */}
-        <div
-          id="fotos"
-          className="relative rounded-2xl overflow-hidden h-[280px] sm:h-[350px] md:h-[420px] mb-8"
-        >
-          {/* MÓVIL: Imagen principal que ocupa 100% */}
-          <div
-            className="w-full h-full cursor-pointer md:hidden relative"
-            onClick={() => setShowGalleryModal(true)}
-          >
-            <img
-              src={property.images[0]}
-              alt="Principal"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* DESKTOP: Grilla de 4 columnas */}
-          <div className="hidden md:grid grid-cols-4 gap-2 h-full">
-            <div className="col-span-2 h-full cursor-pointer" onClick={() => setShowGalleryModal(true)}>
-              <img
-                src={property.images[0]}
-                alt="Principal"
-                className="w-full h-full object-cover hover:brightness-95 transition"
-              />
-            </div>
-            <div className="col-span-2 grid grid-cols-2 gap-2 h-full">
-              {property.images.slice(1, 5).map((img, i) => (
-                <div key={i} className="h-[206px] cursor-pointer" onClick={() => setShowGalleryModal(true)}>
-                  <img
-                    src={img}
-                    alt={`Vista ${i}`}
-                    className="w-full h-full object-cover hover:brightness-95 transition"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={() => setShowGalleryModal(true)}
-            className="absolute bottom-4 right-4 md:bottom-5 md:right-5 bg-white/90 backdrop-blur-md border border-black text-black font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm hover:bg-white transition flex items-center gap-2"
-          >
-            <span>⊞</span> Mostrar todas las fotos
-          </button>
-        </div>
-
         {/* GRID DE DETALLES Y TARJETA FLOTANTE */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 relative">
           {/* COLUMNA IZQUIERDA */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="border-b border-gray-200 pb-6">
-              <h2 className="text-xl font-semibold text-[#222222]">{property.subtitle}</h2>
-              <p className="text-gray-600 text-sm mt-1">{property.specs}</p>
-              <p className="text-sm font-semibold mt-1 flex items-center gap-1">
-                ★ {property.rating} ·{" "}
-                <u className="cursor-pointer" onClick={() => scrollToSection("resenas")}>
-                  {property.reviewsCount} reseñas
-                </u>
+            {/* SECCIÓN MÓVIL EXACTA AIRBNB */}
+            <div className="border-b border-gray-200 pb-6 text-center md:text-left">
+              <h1 className="text-2xl font-bold text-[#222222] leading-tight mb-4">
+                {property.title}
+              </h1>
+              <p className="text-gray-500 text-sm md:text-base font-normal">
+                {property.subtitle}
+              </p>
+              <p className="text-gray-500 text-sm md:text-base font-normal mt-1">
+                {property.specs}
               </p>
             </div>
 
@@ -866,7 +895,7 @@ export default function PropertyDetail() {
                 {property.description}
               </p>
               <button
-                onClick={() => setShowDescriptionModal(false)}
+                onClick={() => setShowDescriptionModal(true)}
                 className="mt-3 font-semibold text-sm text-black underline flex items-center gap-1 hover:opacity-80 transition"
               >
                 Mostrar más &gt;
@@ -990,7 +1019,6 @@ export default function PropertyDetail() {
                       <span>L</span><span>Ma</span><span>Mi</span><span>J</span><span>V</span><span>S</span><span>D</span>
                     </div>
                     <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
-                      {/* Espacios vacíos de alineación */}
                       <span></span><span></span><span></span>
                       {Array.from({ length: 31 }, (_, i) => {
                         const day = i + 1;
@@ -1092,6 +1120,7 @@ export default function PropertyDetail() {
                     <option value="1 huéspedes">1 huésped</option>
                     <option value="2 huéspedes">2 huéspedes</option>
                     <option value="4 huéspedes">4 huéspedes</option>
+                    <option value="6 huéspedes">6 huéspedes</option>
                     <option value="16 huéspedes">16 huéspedes</option>
                   </select>
                 </div>
@@ -1100,7 +1129,7 @@ export default function PropertyDetail() {
               <button
                 onClick={handleReserve}
                 disabled={reserving}
-                className="w-full bg-[#FF385C] hover:bg-[#e00b41] text-white font-semibold py-3.5 rounded-xl transition text-base shadow-sm active:scale-95 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-semibold py-3.5 rounded-xl transition text-base shadow-sm active:scale-95 disabled:opacity-50"
               >
                 {reserving ? "Procesando..." : "Reserva"}
               </button>
@@ -1153,37 +1182,37 @@ export default function PropertyDetail() {
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Limpieza</p>
-              <p className="text-base font-bold my-1">4.6</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.022.547l-1.02 1.02a2 2 0 000 2.828l1.02 1.02a2 2 0 002.828 0l1.02-1.02a2 2 0 00.547-1.022l.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.02-1.02a2 2 0 00-2.828 0l-1.02 1.02a2 2 0 000 2.828l1.02 1.02z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Exactitud</p>
-              <p className="text-base font-bold my-1">4.7</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Check-in</p>
-              <p className="text-base font-bold my-1">4.8</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Comunicación</p>
-              <p className="text-base font-bold my-1">4.8</p>
+              <p className="text-base font-bold my-1">5.0</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Ubicación</p>
-              <p className="text-base font-bold my-1">4.8</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
             </div>
 
             <div>
               <p className="font-semibold">Precio</p>
-              <p className="text-base font-bold my-1">4.7</p>
+              <p className="text-base font-bold my-1">4.8</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
             </div>
           </div>
@@ -1311,7 +1340,7 @@ export default function PropertyDetail() {
           </div>
         </div>
 
-        {/* SECCIÓN CONOCE A TU ANFITRÓN - DISEÑO EXACTO AIRBNB */}
+        {/* SECCIÓN CONOCE A TU ANFITRÓN */}
         <div className="border-t border-gray-200 mt-12 pt-12 pb-12">
           <h2 className="text-[22px] font-semibold text-[#222222] mb-8">
             Conoce a tu anfitrión
@@ -1424,7 +1453,7 @@ export default function PropertyDetail() {
               <h4 className="font-semibold text-gray-900">Reglas de la casa</h4>
               <p className="text-xs text-gray-600 leading-relaxed">Check-in: 3:00 p.m. - 8:00 p.m.</p>
               <p className="text-xs text-gray-600 leading-relaxed">Salida antes de las 11:00 a.m.</p>
-              <p className="text-xs text-gray-600 leading-relaxed">Máximo 24 huéspedes</p>
+              <p className="text-xs text-gray-600 leading-relaxed">Máximo 6 huéspedes</p>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-gray-900">Seguridad y propiedad</h4>
@@ -1439,7 +1468,7 @@ export default function PropertyDetail() {
 
         {/* MÁS ALOJAMIENTOS CERCANOS */}
         <div className="border-t border-gray-200 pt-12 pb-12">
-          <h2 className="text-xl font-semibold mb-6">Más alojamientos en Samaná y alrededores</h2>
+          <h2 className="text-xl font-semibold mb-6">Más alojamientos cerca de esta zona</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {nearbyProperties.map((item) => (
               <div
@@ -1469,28 +1498,33 @@ export default function PropertyDetail() {
 
       </div>
 
-      {/* BARRA FLOTANTE INFERIOR DE RESERVA EN MÓVIL (MOBILE STICKY FOOTER) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3.5 z-40 flex items-center justify-between shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
-        <div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-base font-bold text-gray-900">{property.price}</span>
-            <span className="text-xs text-gray-600 font-normal">/ noche</span>
-          </div>
-          <u 
-            onClick={() => scrollToSection("calendario")}
-            className="text-xs text-gray-700 font-semibold cursor-pointer block mt-0.5"
-          >
-            {checkIn && checkOut ? `${checkIn} - ${checkOut}` : "Seleccionar fechas"}
-          </u>
+      {/* BARRA FLOTANTE INFERIOR DE RESERVA EN MÓVIL EXACTA A AIRBNB */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+        {/* ANUNCIO / AVISO DE OPORTUNIDAD ÚNICA */}
+        <div className="bg-[#EBEBEB] py-1.5 px-4 text-center text-[11px] font-medium text-[#222222] border-b border-gray-300 flex items-center justify-center gap-1.5">
+          <span>💎</span>
+          <span>¡Oportunidad única! Este lugar suele estar reservado.</span>
         </div>
 
-        <button
-          onClick={handleReserve}
-          disabled={reserving}
-          className="bg-[#FF385C] hover:bg-[#e00b41] text-white font-semibold text-sm px-6 py-3 rounded-xl transition shadow-sm active:scale-95 disabled:opacity-50"
-        >
-          {reserving ? "Procesando..." : "Reserva"}
-        </button>
+        {/* CONTENEDOR DE PRECIO Y BOTÓN DE RESERVA */}
+        <div className="px-5 py-3 flex items-center justify-between">
+          <div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-lg font-bold text-gray-900 underline">{property.price}</span>
+            </div>
+            <p className="text-[11px] text-gray-700 font-normal">
+              Por 5 noches · 13–18 de oct
+            </p>
+          </div>
+
+          <button
+            onClick={handleReserve}
+            disabled={reserving}
+            className="bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-bold text-base px-8 py-3 rounded-2xl transition shadow-md active:scale-95 disabled:opacity-50"
+          >
+            {reserving ? "Procesando..." : "Reservar"}
+          </button>
+        </div>
       </div>
     </main>
   );
