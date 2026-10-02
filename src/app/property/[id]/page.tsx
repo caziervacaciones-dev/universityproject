@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -38,6 +38,21 @@ export default function PropertyDetail() {
 
   const idRaw = params?.id;
   const id = Array.isArray(idRaw) ? idRaw[0] : idRaw || "1";
+
+  // REFERENCIA Y ESTADO PARA CARRUSEL MÓVIL
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  const handleScrollCarousel = () => {
+    if (carouselRef.current) {
+      const scrollPosition = carouselRef.current.scrollLeft;
+      const width = carouselRef.current.offsetWidth;
+      if (width > 0) {
+        const newIndex = Math.round(scrollPosition / width);
+        setCurrentSlide(newIndex);
+      }
+    }
+  };
 
   // ESTADOS DE DATOS REALES DE SUPABASE
   const [realProperty, setRealProperty] = useState<any>(null);
@@ -688,51 +703,53 @@ export default function PropertyDetail() {
       {/* SUB-HEADER PEGAJOSO (AL HACER SCROLL) */}
       {showStickyNav && (
         <div className="sticky top-0 z-30 bg-white border-b border-gray-200 transition-all duration-200 hidden md:block shadow-sm">
-          <div className="max-w-[1120px] mx-auto px-6 flex items-center justify-between h-20">
-            <div className="flex gap-8 text-sm font-semibold text-gray-800">
-              <button onClick={() => scrollToSection("fotos")} className="py-7 border-b-2 border-black">
-                Fotos
-              </button>
-              <button
-                onClick={() => scrollToSection("servicios")}
-                className="py-7 hover:border-b-2 hover:border-black text-gray-600"
-              >
-                Servicios
-              </button>
-              <button
-                onClick={() => scrollToSection("resenas")}
-                className="py-7 hover:border-b-2 hover:border-black text-gray-600"
-              >
-                Reseñas
-              </button>
-              <button
-                onClick={() => scrollToSection("ubicacion")}
-                className="py-7 hover:border-b-2 hover:border-black text-gray-600"
-              >
-                Ubicación
-              </button>
-            </div>
-            <div className="flex items-center gap-4">
-              <div>
-                <span className="font-bold text-base">{totalPriceFormatted}</span>
-                <span className="text-xs text-gray-600"> {nightsCount > 0 ? `por ${nightsCount} noche${nightsCount > 1 ? "s" : ""}` : "por noche"}</span>
-                <div className="text-[11px] text-gray-700 font-medium">
-                  ★ {property.rating} · {property.reviewsCount} reseñas
-                </div>
+          <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0">
+            <div className="flex justify-between items-center">
+              <div className="flex gap-8 text-sm font-semibold text-gray-800">
+                <button onClick={() => scrollToSection("fotos")} className="py-7 border-b-2 border-black">
+                  Fotos
+                </button>
+                <button
+                  onClick={() => scrollToSection("servicios")}
+                  className="py-7 hover:border-b-2 hover:border-black text-gray-600"
+                >
+                  Servicios
+                </button>
+                <button
+                  onClick={() => scrollToSection("resenas")}
+                  className="py-7 hover:border-b-2 hover:border-black text-gray-600"
+                >
+                  Reseñas
+                </button>
+                <button
+                  onClick={() => scrollToSection("ubicacion")}
+                  className="py-7 hover:border-b-2 hover:border-black text-gray-600"
+                >
+                  Ubicación
+                </button>
               </div>
-              <button
-                onClick={handleReserve}
-                disabled={reserving}
-                className="bg-[#FF385C] hover:bg-[#e00b41] text-white font-semibold text-sm px-6 py-3 rounded-lg transition disabled:opacity-50"
-              >
-                {reserving ? "Procesando..." : "Reserva"}
-              </button>
+              <div className="flex items-center gap-4">
+                <div>
+                  <span className="font-bold text-base">{totalPriceFormatted}</span>
+                  <span className="text-xs text-gray-600"> {nightsCount > 0 ? `por ${nightsCount} noche${nightsCount > 1 ? "s" : ""}` : "por noche"}</span>
+                  <div className="text-[11px] text-gray-700 font-medium">
+                    ★ {property.rating} · {property.reviewsCount} reseñas
+                  </div>
+                </div>
+                <button
+                  onClick={handleReserve}
+                  disabled={reserving}
+                  className="bg-[#FF385C] hover:bg-[#e00b41] text-white font-semibold text-sm px-6 py-3 rounded-lg transition disabled:opacity-50"
+                >
+                  {reserving ? "Procesando..." : "Reserva"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* GALERÍA COLLAGE / FOTO PRINCIPAL MÓVIL EXACTA A AIRBNB */}
+      {/* GALERÍA COLLAGE / CARRUSEL MÓVIL DESLIZABLE */}
       <div
         id="fotos"
         className="relative w-full h-[320px] sm:h-[380px] md:h-[420px] md:max-w-[1120px] md:mx-auto md:px-6 md:pt-6 md:rounded-2xl overflow-hidden"
@@ -761,19 +778,31 @@ export default function PropertyDetail() {
           </div>
         </div>
 
-        {/* MÓVIL: Imagen principal que ocupa 100% borde a borde */}
+        {/* PASO 4: CARRUSEL MÓVIL INTERACTIVO DESLIZABLE CON EL DEDO */}
         <div
-          className="w-full h-full cursor-pointer md:hidden relative"
-          onClick={() => setShowGalleryModal(true)}
+          ref={carouselRef}
+          onScroll={handleScrollCarousel}
+          className="md:hidden flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-none scroll-smooth"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <img
-            src={property.images[0]}
-            alt="Principal"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md">
-            1 / {property.images.length}
-          </div>
+          {property.images.map((img, idx) => (
+            <div
+              key={idx}
+              className="w-full h-full flex-shrink-0 snap-start relative cursor-pointer"
+              onClick={() => setShowGalleryModal(true)}
+            >
+              <img
+                src={img}
+                alt={`Foto ${idx + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* CONTADOR EN MÓVIL */}
+        <div className="md:hidden absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-10 pointer-events-none">
+          {currentSlide + 1} / {property.images.length}
         </div>
 
         {/* DESKTOP: Grilla de 4 columnas */}
@@ -807,7 +836,8 @@ export default function PropertyDetail() {
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
-      <div className="max-w-[1120px] mx-auto px-6 pt-6">
+      {/* PASO 1: APLICADO BORDES REDONDEADOS -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0 */}
+      <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0">
         {/* TITULO Y ACCIONES DESKTOP */}
         <div className="hidden md:flex justify-between items-start mb-4">
           <h1 className="text-2xl sm:text-[26px] font-semibold text-[#222222] tracking-tight">
@@ -847,6 +877,46 @@ export default function PropertyDetail() {
               </p>
             </div>
 
+            {/* PASO 2: BLOQUE TARJETA DESTACADA "FAVORITO ENTRE HUÉSPEDES" CON RAMITAS */}
+            <div className="border border-gray-200 rounded-2xl p-4 my-6 text-center shadow-xs">
+              <div className="flex items-center justify-center gap-2 md:gap-8">
+                {/* Puntuación */}
+                <div className="flex flex-col items-center px-3">
+                  <span className="text-lg font-extrabold text-[#222222]">{property.rating}</span>
+                  <div className="text-xs text-black">★★★★★</div>
+                </div>
+
+                <div className="h-10 w-[1px] bg-gray-200"></div>
+
+                {/* Ramitas de Laurel SVG */}
+                <div className="flex items-center gap-2 px-2">
+                  <svg className="w-6 h-8 text-amber-600 fill-current" viewBox="0 0 24 24">
+                    <path d="M11 21c-4.97 0-9-4.03-9-9 0-2.12.74-4.07 1.97-5.61L5.4 7.8A6.96 6.96 0 0 0 4 12c0 3.86 3.14 7 7 7v2z" />
+                  </svg>
+                  <span className="text-sm font-extrabold text-[#222222] max-w-[110px] leading-tight">
+                    Favorito entre huéspedes
+                  </span>
+                  <svg className="w-6 h-8 text-amber-600 fill-current" viewBox="0 0 24 24">
+                    <path d="M13 21c4.97 0 9-4.03 9-9 0-2.12-.74-4.07-1.97-5.61L18.6 7.8A6.96 6.96 0 0 1 20 12c0 3.86-3.14 7-7 7v2z" />
+                  </svg>
+                </div>
+
+                <div className="h-10 w-[1px] bg-gray-200"></div>
+
+                {/* Evaluaciones */}
+                <div className="flex flex-col items-center px-3">
+                  <span className="text-lg font-extrabold text-[#222222]">{property.reviewsCount}</span>
+                  <span className="text-[11px] text-gray-500 underline font-medium">Evaluaciones</span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
+                <span className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-md font-medium">
+                  Cancelación gratuita
+                </span>
+              </div>
+            </div>
+
             {/* ANFITRIÓN RESUMEN ESTILO AIRBNB */}
             <div className="border-b border-gray-200 pb-6 flex items-center gap-4">
               <img
@@ -859,6 +929,45 @@ export default function PropertyDetail() {
                   Anfitrión: {property.host}
                 </h4>
                 <p className="text-xs text-gray-500">{property.hostExp}</p>
+              </div>
+            </div>
+
+            {/* PASO 3: LOGROS DEL ALOJAMIENTO (TROFEO, ALBERCA Y CLIMA) */}
+            <div className="border-b border-gray-200 pb-6 space-y-6 my-6">
+              {/* Trofeo */}
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">🏆</span>
+                <div>
+                  <h4 className="font-bold text-sm text-gray-900">
+                    En el 10% de los alojamientos mejor calificados
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    Este alojamiento está entre los mejores en Airbnb, según las calificaciones, evaluaciones y confiabilidad.
+                  </p>
+                </div>
+              </div>
+
+              {/* Alberca */}
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">🏊</span>
+                <div>
+                  <h4 className="font-bold text-sm text-gray-900">
+                    Disfruta la alberca y el jacuzzi
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    En este alojamiento puedes nadar o darte un chapuzón.
+                  </p>
+                </div>
+              </div>
+
+              {/* Clima */}
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">❄️</span>
+                <div>
+                  <h4 className="font-bold text-sm text-gray-900">
+                    Diseñado para garantizar el fresquito
+                  </h4>
+                </div>
               </div>
             </div>
 
