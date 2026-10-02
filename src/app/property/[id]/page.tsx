@@ -836,7 +836,6 @@ export default function PropertyDetail() {
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
-      {/* PASO 1: APLICADO BORDES REDONDEADOS -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0 */}
       <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0">
         {/* TITULO Y ACCIONES DESKTOP */}
         <div className="hidden md:flex justify-between items-start mb-4">
@@ -877,7 +876,7 @@ export default function PropertyDetail() {
               </p>
             </div>
 
-            {/* PASO 2: BLOQUE TARJETA DESTACADA "FAVORITO ENTRE HUÉSPEDES" CON RAMITAS */}
+            {/* BLOQUE TARJETA DESTACADA "FAVORITO ENTRE HUÉSPEDES" CON RAMITAS /izquierda.png Y /derecha.png */}
             <div className="border border-gray-200 rounded-2xl p-4 my-6 text-center shadow-xs">
               <div className="flex items-center justify-center gap-2 md:gap-8">
                 {/* Puntuación */}
@@ -888,17 +887,21 @@ export default function PropertyDetail() {
 
                 <div className="h-10 w-[1px] bg-gray-200"></div>
 
-                {/* Ramitas de Laurel SVG */}
+                {/* Ramitas de Laurel (imágenes en public) */}
                 <div className="flex items-center gap-2 px-2">
-                  <svg className="w-6 h-8 text-amber-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M11 21c-4.97 0-9-4.03-9-9 0-2.12.74-4.07 1.97-5.61L5.4 7.8A6.96 6.96 0 0 0 4 12c0 3.86 3.14 7 7 7v2z" />
-                  </svg>
+                  <img
+                    src="/izquierda.png"
+                    alt="Ramita Izquierda"
+                    className="h-10 w-auto object-contain"
+                  />
                   <span className="text-sm font-extrabold text-[#222222] max-w-[110px] leading-tight">
                     Favorito entre huéspedes
                   </span>
-                  <svg className="w-6 h-8 text-amber-600 fill-current" viewBox="0 0 24 24">
-                    <path d="M13 21c4.97 0 9-4.03 9-9 0-2.12-.74-4.07-1.97-5.61L18.6 7.8A6.96 6.96 0 0 1 20 12c0 3.86-3.14 7-7 7v2z" />
-                  </svg>
+                  <img
+                    src="/derecha.png"
+                    alt="Ramita Derecha"
+                    className="h-10 w-auto object-contain"
+                  />
                 </div>
 
                 <div className="h-10 w-[1px] bg-gray-200"></div>
@@ -932,7 +935,7 @@ export default function PropertyDetail() {
               </div>
             </div>
 
-            {/* PASO 3: LOGROS DEL ALOJAMIENTO (TROFEO, ALBERCA Y CLIMA) */}
+            {/* LOGROS DEL ALOJAMIENTO */}
             <div className="border-b border-gray-200 pb-6 space-y-6 my-6">
               {/* Trofeo */}
               <div className="flex items-start gap-4">
@@ -971,7 +974,7 @@ export default function PropertyDetail() {
               </div>
             </div>
 
-            {/* HIGHLIGHTS DESTACADOS CON SVG MONOCROMÁTICOS */}
+            {/* HIGHLIGHTS DESTACADOS */}
             <div className="border-b border-gray-200 pb-6 space-y-4">
               <div className="flex items-start gap-4">
                 <svg className="w-6 h-6 text-gray-800 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
