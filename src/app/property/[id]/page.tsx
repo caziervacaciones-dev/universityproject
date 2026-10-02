@@ -74,6 +74,7 @@ export default function PropertyDetail() {
   // NUEVOS ESTADOS DE INTERACCIÓN AIRBNB
   const [showDescriptionModal, setShowDescriptionModal] = useState<boolean>(false);
   const [showAmenitiesModal, setShowAmenitiesModal] = useState<boolean>(false);
+  const [showPriceDetailsModal, setShowPriceDetailsModal] = useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   // FECHAS Y HUÉSPEDES
@@ -570,6 +571,78 @@ export default function PropertyDetail() {
       {showShareToast && (
         <div className="fixed bottom-24 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
           <span>🔗</span> ¡Enlace copiado al portapapeles!
+        </div>
+      )}
+
+      {/* MODAL DE DETALLES DE PRECIO Y DESGLOSE (ESTILO AIRBNB) */}
+      {showPriceDetailsModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity">
+          <div className="bg-white rounded-t-3xl sm:rounded-2xl max-w-lg w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-200">
+            <button
+              onClick={() => setShowPriceDetailsModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full font-bold text-gray-500 transition"
+              aria-label="Cerrar modal"
+            >
+              ✕
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4 border-b border-gray-100 pb-3 text-gray-900">
+              Información del precio
+            </h3>
+
+            <div className="space-y-4 text-sm text-gray-800">
+              <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                <span className="text-gray-600">Fechas seleccionadas</span>
+                <button 
+                  onClick={() => {
+                    setShowPriceDetailsModal(false);
+                    scrollToSection("calendario");
+                  }}
+                  className="font-semibold text-black underline hover:text-gray-600 transition"
+                >
+                  Cambiar
+                </button>
+              </div>
+
+              <div className="space-y-3 py-2">
+                <div className="flex justify-between items-center text-sm">
+                  <span>{property.price} × {nightsCount > 0 ? nightsCount : 1} noche{nightsCount > 1 ? "s" : ""}</span>
+                  <span className="font-medium">{totalPriceFormatted}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                  <span>Tarifa por servicio de Airbnb</span>
+                  <span>$0.00 USD</span>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                  <span>Impuestos incluidos</span>
+                  <span>$0.00 USD</span>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-200 pt-4 flex justify-between items-center font-bold text-base text-black">
+                <span>Total estimado</span>
+                <span>{totalPriceFormatted}</span>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-xs text-green-800 mt-4 flex items-center gap-2">
+                <span>✓</span>
+                <span><strong>Cancelación gratuita</strong> disponible para las fechas seleccionadas.</span>
+              </div>
+
+              <div className="pt-4">
+                <button
+                  onClick={() => {
+                    setShowPriceDetailsModal(false);
+                    handleReserve();
+                  }}
+                  disabled={reserving}
+                  className="w-full bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-bold py-3.5 rounded-xl transition shadow-md active:scale-95 disabled:opacity-50"
+                >
+                  {reserving ? "Procesando..." : "Reservar ahora"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -1650,9 +1723,9 @@ export default function PropertyDetail() {
 
         {/* CONTENEDOR DE PRECIO Y BOTÓN DE RESERVA */}
         <div className="px-5 py-3 flex items-center justify-between">
-          {/* HACIENDO CLIC AQUÍ LLEVA DIRECTO AL CALENDARIO PARA EDITAR LAS FECHAS */}
+          {/* HACIENDO CLIC AQUÍ ABRE EL MODAL DE DETALLES DE PRECIO */}
           <div 
-            onClick={() => scrollToSection("calendario")}
+            onClick={() => setShowPriceDetailsModal(true)}
             className="cursor-pointer group active:opacity-70 transition"
           >
             <div className="flex items-baseline gap-1">
