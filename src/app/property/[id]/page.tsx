@@ -1282,7 +1282,7 @@ export default function PropertyDetail() {
                   <div key={num} className="flex items-center gap-2 text-[10px]">
                     <span>{num}</span>
                     <div className="w-full bg-gray-200 h-1 rounded-full overflow-hidden">
-                      <div className="bg-black h-full" style={{ width: num === 5 ? '90%' : num === 4 ? '10%' : '0%' }}></div>
+                      <div className="bg-black h-full" style={{ width: num === 5 ? "90%" : num === 4 ? "10%" : "0%" }}></div>
                     </div>
                   </div>
                 ))}
