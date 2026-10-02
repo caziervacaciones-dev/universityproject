@@ -241,13 +241,13 @@ export default function PropertyDetail() {
   ];
 
   const reviewTags = [
-    { label: "Piscina", count: 13, icon: "🛍️" },
-    { label: "Hospitalidad", count: 85, icon: "🎁" },
-    { label: "Vista", count: 39, icon: "🖼️" },
-    { label: "Familiar", count: 26, icon: "🧸" },
+    { label: "Piscina", count: 13, icon: "🏊" },
+    { label: "Hospitalidad", count: 85, icon: "🤝" },
+    { label: "Vista", count: 39, icon: "🏔️" },
+    { label: "Familiar", count: 26, icon: "🏡" },
     { label: "Espacios interiores", count: 18, icon: "🛋️" },
-    { label: "Jacuzzi", count: 9, icon: "🪵" },
-    { label: "Limpieza", count: 22, icon: "🧴" },
+    { label: "Jacuzzi", count: 9, icon: "♨️" },
+    { label: "Limpieza", count: 22, icon: "✨" },
   ];
 
   const userReviews = [
@@ -754,31 +754,43 @@ export default function PropertyDetail() {
         id="fotos"
         className="relative w-full h-[320px] sm:h-[380px] md:h-[420px] md:max-w-[1120px] md:mx-auto md:px-6 md:pt-6 md:rounded-2xl overflow-hidden"
       >
-        {/* MÓVIL: BOTONES FLOTANTES SUPERIORES SOBRE LA FOTO */}
+        {/* MÓVIL: BOTONES FLOTANTES SUPERIORES SOBRE LA FOTO CON EL ESTILO OFICIAL AIRBNB */}
         <div className="md:hidden absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-auto">
           <button
             onClick={() => handleRedirectToAirbnb()}
-            className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black font-bold shadow-md active:scale-95 transition"
+            className="w-9 h-9 bg-[#222222]/30 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-sm active:scale-95 transition"
+            aria-label="Regresar"
           >
-            ←
+            <svg viewBox="0 0 32 32" className="w-4 h-4 fill-none stroke-current stroke-[3px]">
+              <path d="M20 28L8 16 20 4" />
+            </svg>
           </button>
           <div className="flex items-center gap-3">
             <button
               onClick={handleShare}
-              className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black shadow-md active:scale-95 transition text-sm"
+              className="w-9 h-9 bg-[#222222]/30 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-sm active:scale-95 transition"
+              aria-label="Compartir"
             >
-              ⇧
+              <svg viewBox="0 0 32 32" className="w-4 h-4 fill-none stroke-current stroke-[2.5px]">
+                <path d="M24 12v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V12m8-8v16m-6-10l6-6 6 6" />
+              </svg>
             </button>
             <button
               onClick={handleToggleSave}
-              className="w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-black shadow-md active:scale-95 transition text-sm"
+              className="w-9 h-9 bg-[#222222]/30 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-sm active:scale-95 transition"
+              aria-label="Guardar"
             >
-              <span className={isSaved ? "text-[#FF385C]" : ""}>{isSaved ? "❤️" : "♡"}</span>
+              <svg 
+                viewBox="0 0 32 32" 
+                className={`w-4 h-4 stroke-current stroke-[2.5px] ${isSaved ? "fill-[#FF385C] stroke-[#FF385C]" : "fill-none text-white"}`}
+              >
+                <path d="M16 28c7-4.73 14-10 14-17a6.98 6.98 0 0 0-7-7c-1.8 0-3.58.83-4.84 2.13L16 8.35l-2.16-2.22A6.98 6.98 0 0 0 9 4a6.98 6.98 0 0 0-7 7c0 7 7 12.27 14 17z" />
+              </svg>
             </button>
           </div>
         </div>
 
-        {/* PASO 4: CARRUSEL MÓVIL INTERACTIVO DESLIZABLE CON EL DEDO */}
+        {/* CARRUSEL MÓVIL INTERACTIVO DESLIZABLE CON EL DEDO */}
         <div
           ref={carouselRef}
           onScroll={handleScrollCarousel}
@@ -876,40 +888,40 @@ export default function PropertyDetail() {
               </p>
             </div>
 
-            {/* BLOQUE TARJETA DESTACADA "FAVORITO ENTRE HUÉSPEDES" CON RAMITAS /izquierda.png Y /derecha.png */}
-            <div className="border border-gray-200 rounded-2xl p-4 my-6 text-center shadow-xs">
-              <div className="flex items-center justify-center gap-2 md:gap-8">
+            {/* BLOQUE TARJETA DESTACADA "FAVORITO ENTRE HUÉSPEDES" CORREGIDO */}
+            <div className="border border-gray-200 rounded-2xl p-4 my-6 shadow-xs">
+              <div className="flex items-center justify-between sm:justify-center sm:gap-8">
                 {/* Puntuación */}
-                <div className="flex flex-col items-center px-3">
+                <div className="flex flex-col items-center px-2 sm:px-3">
                   <span className="text-lg font-extrabold text-[#222222]">{property.rating}</span>
                   <div className="text-xs text-black">★★★★★</div>
                 </div>
 
                 <div className="h-10 w-[1px] bg-gray-200"></div>
 
-                {/* Ramitas de Laurel (imágenes en public) */}
-                <div className="flex items-center gap-2 px-2">
+                {/* Ramitas de Laurel agrupadas con su texto central */}
+                <div className="favorito-container flex items-center justify-center gap-2 px-1">
                   <img
                     src="/izquierda.png"
                     alt="Ramita Izquierda"
-                    className="h-10 w-auto object-contain"
+                    className="rama rama-izquierda h-10 w-auto object-contain"
                   />
-                  <span className="text-sm font-extrabold text-[#222222] max-w-[110px] leading-tight">
-                    Favorito entre huéspedes
-                  </span>
+                  <div className="texto-favorito text-xs sm:text-sm font-extrabold text-[#222222] text-center leading-tight max-w-[110px]">
+                    Favorito<br />entre<br />huéspedes
+                  </div>
                   <img
                     src="/derecha.png"
                     alt="Ramita Derecha"
-                    className="h-10 w-auto object-contain"
+                    className="rama rama-derecha h-10 w-auto object-contain"
                   />
                 </div>
 
                 <div className="h-10 w-[1px] bg-gray-200"></div>
 
                 {/* Evaluaciones */}
-                <div className="flex flex-col items-center px-3">
-                  <span className="text-lg font-extrabold text-[#222222]">{property.reviewsCount}</span>
-                  <span className="text-[11px] text-gray-500 underline font-medium">Evaluaciones</span>
+                <div className="evaluaciones-container flex flex-col items-center px-2 sm:px-3">
+                  <span className="numero text-lg font-extrabold text-[#222222]">{property.reviewsCount}</span>
+                  <span className="label text-[11px] text-gray-500 underline font-medium">Evaluaciones</span>
                 </div>
               </div>
 
