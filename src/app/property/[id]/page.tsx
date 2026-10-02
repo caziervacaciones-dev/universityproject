@@ -81,6 +81,17 @@ export default function PropertyDetail() {
   const [checkOut, setCheckOut] = useState<string>("2026-10-18");
   const [guests, setGuests] = useState<string>("6 huéspedes");
 
+  // NAVEGACIÓN DINÁMICA DE MESES EN EL CALENDARIO
+  const [currentCalendarDate, setCurrentCalendarDate] = useState<Date>(new Date(2026, 8, 1)); // Septiembre 2026
+
+  const handleNextMonth = () => {
+    setCurrentCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+  };
+
+  const handlePrevMonth = () => {
+    setCurrentCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  };
+
   // CÁLCULO DE NOCHES Y PRECIOS
   const nightsCount = useMemo(() => {
     if (!checkIn || !checkOut) return 0;
@@ -489,6 +500,60 @@ export default function PropertyDetail() {
   const scrollToSection = (idStr: string) => {
     const el = document.getElementById(idStr);
     if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // GENERAR MES PARA EL CALENDARIO
+  const renderMonth = (monthOffset: number) => {
+    const targetDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + monthOffset, 1);
+    const monthName = targetDate.toLocaleString("es-ES", { month: "long" });
+    const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+    const year = targetDate.getFullYear();
+
+    const daysInMonth = new Date(year, targetDate.getMonth() + 1, 0).getDate();
+    const firstDayOfWeek = (new Date(year, targetDate.getMonth(), 1).getDay() + 6) % 7; // Ajustar Lunes=0
+
+    return (
+      <div className="w-full">
+        <h4 className="text-center font-semibold text-sm mb-4">
+          {capitalizedMonth} {year}
+        </h4>
+        <div className="grid grid-cols-7 text-center font-bold text-xs text-gray-400 mb-2">
+          <span>L</span><span>Ma</span><span>Mi</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+        <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
+          {Array.from({ length: firstDayOfWeek }).map((_, i) => (
+            <span key={`empty-${i}`}></span>
+          ))}
+          {Array.from({ length: daysInMonth }, (_, i) => {
+            const day = i + 1;
+            const m = targetDate.getMonth() + 1;
+            const dateStr = `${year}-${m < 10 ? "0" + m : m}-${day < 10 ? "0" + day : day}`;
+            const isBlocked = disabledDatesSet.has(dateStr);
+            const isSelected = dateStr === checkIn || dateStr === checkOut;
+            const isInRange = checkIn && checkOut && dateStr > checkIn && dateStr < checkOut;
+
+            return (
+              <button
+                key={dateStr}
+                disabled={isBlocked}
+                onClick={() => handleDateClick(dateStr)}
+                className={`h-9 w-9 mx-auto rounded-full flex items-center justify-center font-medium transition ${
+                  isBlocked
+                    ? "text-gray-300 line-through cursor-not-allowed"
+                    : isSelected
+                    ? "bg-black text-white"
+                    : isInRange
+                    ? "bg-gray-100 text-black rounded-none w-full"
+                    : "hover:border border-black"
+                }`}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -1087,8 +1152,8 @@ export default function PropertyDetail() {
               </button>
             </div>
 
-            {/* SECCIÓN CALENDARIO INTERACTIVO EN PÁGINA */}
-            <div id="calendario" className="border-b border-gray-200 pb-8">
+            {/* SECCIÓN CALENDARIO INTERACTIVO EN PÁGINA (DINÁMICO ESTILO AIRBNB REAL) */}
+            <div id="calendario" className="border-b border-gray-200 pb-8 scroll-mt-20">
               <h3 className="text-xl font-semibold mb-1">
                 {nightsCount > 0 
                   ? `${nightsCount} noche${nightsCount > 1 ? "s" : ""} en ${property.location.split(',')[0]}` 
@@ -1098,79 +1163,32 @@ export default function PropertyDetail() {
                 {checkIn && checkOut ? `${checkIn} - ${checkOut}` : "Añade tus fechas de viaje para ver precios exactos"}
               </p>
 
-              <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 shadow-sm">
+              <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 shadow-sm relative">
+                {/* BOTONES DE NAVEGACIÓN DE MESES */}
+                <div className="flex justify-between items-center mb-4">
+                  <button
+                    onClick={handlePrevMonth}
+                    className="p-2 hover:bg-gray-100 rounded-full text-gray-700 transition"
+                    aria-label="Mes anterior"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    onClick={handleNextMonth}
+                    className="p-2 hover:bg-gray-100 rounded-full text-gray-700 transition"
+                    aria-label="Mes siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* SEPTIEMBRE 2026 */}
-                  <div>
-                    <h4 className="text-center font-semibold text-sm mb-4">Septiembre 2026</h4>
-                    <div className="grid grid-cols-7 text-center font-bold text-xs text-gray-400 mb-2">
-                      <span>L</span><span>Ma</span><span>Mi</span><span>J</span><span>V</span><span>S</span><span>D</span>
-                    </div>
-                    <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
-                      {Array.from({ length: 30 }, (_, i) => {
-                        const day = i + 1;
-                        const dateStr = `2026-09-${day < 10 ? "0" + day : day}`;
-                        const isBlocked = disabledDatesSet.has(dateStr);
-                        const isSelected = dateStr === checkIn || dateStr === checkOut;
-                        const isInRange = checkIn && checkOut && dateStr > checkIn && dateStr < checkOut;
+                  {/* PRIMER MES VISIBLE */}
+                  {renderMonth(0)}
 
-                        return (
-                          <button
-                            key={dateStr}
-                            disabled={isBlocked}
-                            onClick={() => handleDateClick(dateStr)}
-                            className={`h-9 w-9 mx-auto rounded-full flex items-center justify-center font-medium transition ${
-                              isBlocked
-                                ? "text-gray-300 line-through cursor-not-allowed"
-                                : isSelected
-                                ? "bg-black text-white"
-                                : isInRange
-                                ? "bg-gray-100 text-black rounded-none w-full"
-                                : "hover:border border-black"
-                            }`}
-                          >
-                            {day}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* OCTUBRE 2026 */}
-                  <div>
-                    <h4 className="text-center font-semibold text-sm mb-4">Octubre 2026</h4>
-                    <div className="grid grid-cols-7 text-center font-bold text-xs text-gray-400 mb-2">
-                      <span>L</span><span>Ma</span><span>Mi</span><span>J</span><span>V</span><span>S</span><span>D</span>
-                    </div>
-                    <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
-                      <span></span><span></span><span></span>
-                      {Array.from({ length: 31 }, (_, i) => {
-                        const day = i + 1;
-                        const dateStr = `2026-10-${day < 10 ? "0" + day : day}`;
-                        const isBlocked = disabledDatesSet.has(dateStr);
-                        const isSelected = dateStr === checkIn || dateStr === checkOut;
-                        const isInRange = checkIn && checkOut && dateStr > checkIn && dateStr < checkOut;
-
-                        return (
-                          <button
-                            key={dateStr}
-                            disabled={isBlocked}
-                            onClick={() => handleDateClick(dateStr)}
-                            className={`h-9 w-9 mx-auto rounded-full flex items-center justify-center font-medium transition ${
-                              isBlocked
-                                ? "text-gray-300 line-through cursor-not-allowed"
-                                : isSelected
-                                ? "bg-black text-white"
-                                : isInRange
-                                ? "bg-gray-100 text-black rounded-none w-full"
-                                : "hover:border border-black"
-                            }`}
-                          >
-                            {day}
-                          </button>
-                        );
-                      })}
-                    </div>
+                  {/* SEGUNDO MES VISIBLE (DESKTOP SOLO) */}
+                  <div className="hidden md:block">
+                    {renderMonth(1)}
                   </div>
                 </div>
 
@@ -1632,12 +1650,20 @@ export default function PropertyDetail() {
 
         {/* CONTENEDOR DE PRECIO Y BOTÓN DE RESERVA */}
         <div className="px-5 py-3 flex items-center justify-between">
-          <div>
+          {/* HACIENDO CLIC AQUÍ LLEVA DIRECTO AL CALENDARIO PARA EDITAR LAS FECHAS */}
+          <div 
+            onClick={() => scrollToSection("calendario")}
+            className="cursor-pointer group active:opacity-70 transition"
+          >
             <div className="flex items-baseline gap-1">
-              <span className="text-lg font-bold text-gray-900 underline">{property.price}</span>
+              <span className="text-lg font-bold text-gray-900 underline group-hover:text-black">
+                {property.price}
+              </span>
             </div>
             <p className="text-[11px] text-gray-700 font-normal">
-              Por 5 noches · 13–18 de oct
+              {checkIn && checkOut 
+                ? `Por ${nightsCount} noche${nightsCount > 1 ? "s" : ""} · ${checkIn.split("-")[2]}–${checkOut.split("-")[2]} de oct`
+                : "Selecciona las fechas"}
             </p>
           </div>
 
