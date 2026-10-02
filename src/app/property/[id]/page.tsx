@@ -485,10 +485,10 @@ export default function PropertyDetail() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-[#222222] font-sans antialiased selection:bg-[#FF385C] selection:text-white relative">
+    <main className="min-h-screen bg-white text-[#222222] font-sans antialiased selection:bg-[#FF385C] selection:text-white relative pb-20 lg:pb-0">
       {/* NOTIFICACIÓN AL COPIAR ENLACE */}
       {showShareToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
+        <div className="fixed bottom-20 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
           <span>🔗</span> ¡Enlace copiado al portapapeles!
         </div>
       )}
@@ -756,33 +756,48 @@ export default function PropertyDetail() {
           </div>
         </div>
 
-        {/* GALERÍA COLLAGE */}
+        {/* GALERÍA COLLAGE (OPTIMIZADA MÓVIL) */}
         <div
           id="fotos"
-          className="relative grid grid-cols-1 md:grid-cols-4 gap-2 rounded-2xl overflow-hidden h-[420px] mb-8"
+          className="relative rounded-2xl overflow-hidden h-[280px] sm:h-[350px] md:h-[420px] mb-8"
         >
-          <div className="md:col-span-2 h-full cursor-pointer" onClick={() => setShowGalleryModal(true)}>
+          {/* MÓVIL: Imagen principal que ocupa 100% */}
+          <div
+            className="w-full h-full cursor-pointer md:hidden relative"
+            onClick={() => setShowGalleryModal(true)}
+          >
             <img
               src={property.images[0]}
               alt="Principal"
-              className="w-full h-full object-cover hover:brightness-95 transition"
+              className="w-full h-full object-cover"
             />
           </div>
-          <div className="hidden md:grid col-span-2 grid-cols-2 gap-2 h-full">
-            {property.images.slice(1, 5).map((img, i) => (
-              <div key={i} className="h-[206px] cursor-pointer" onClick={() => setShowGalleryModal(true)}>
-                <img
-                  src={img}
-                  alt={`Vista ${i}`}
-                  className="w-full h-full object-cover hover:brightness-95 transition"
-                />
-              </div>
-            ))}
+
+          {/* DESKTOP: Grilla de 4 columnas */}
+          <div className="hidden md:grid grid-cols-4 gap-2 h-full">
+            <div className="col-span-2 h-full cursor-pointer" onClick={() => setShowGalleryModal(true)}>
+              <img
+                src={property.images[0]}
+                alt="Principal"
+                className="w-full h-full object-cover hover:brightness-95 transition"
+              />
+            </div>
+            <div className="col-span-2 grid grid-cols-2 gap-2 h-full">
+              {property.images.slice(1, 5).map((img, i) => (
+                <div key={i} className="h-[206px] cursor-pointer" onClick={() => setShowGalleryModal(true)}>
+                  <img
+                    src={img}
+                    alt={`Vista ${i}`}
+                    className="w-full h-full object-cover hover:brightness-95 transition"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <button
             onClick={() => setShowGalleryModal(true)}
-            className="absolute bottom-5 right-5 bg-white/90 backdrop-blur-md border border-black text-black font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm hover:bg-white transition flex items-center gap-2"
+            className="absolute bottom-4 right-4 md:bottom-5 md:right-5 bg-white/90 backdrop-blur-md border border-black text-black font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm hover:bg-white transition flex items-center gap-2"
           >
             <span>⊞</span> Mostrar todas las fotos
           </button>
@@ -851,7 +866,7 @@ export default function PropertyDetail() {
                 {property.description}
               </p>
               <button
-                onClick={() => setShowDescriptionModal(true)}
+                onClick={() => setShowDescriptionModal(false)}
                 className="mt-3 font-semibold text-sm text-black underline flex items-center gap-1 hover:opacity-80 transition"
               >
                 Mostrar más &gt;
@@ -930,7 +945,7 @@ export default function PropertyDetail() {
                 {checkIn && checkOut ? `${checkIn} - ${checkOut}` : "Añade tus fechas de viaje para ver precios exactos"}
               </p>
 
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+              <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* SEPTIEMBRE 2026 */}
                   <div>
@@ -1023,8 +1038,8 @@ export default function PropertyDetail() {
             </div>
           </div>
 
-          {/* COLUMNA DERECHA: TARJETA DE RESERVA FLOTANTE AIRBNB */}
-          <div className="lg:col-span-1">
+          {/* COLUMNA DERECHA: TARJETA DE RESERVA FLOTANTE DESKTOP (OCULTA EN MÓVIL) */}
+          <div className="hidden lg:block lg:col-span-1">
             <div className="sticky top-28 border border-gray-200 shadow-xl rounded-2xl p-6 bg-white space-y-5">
               <div className="bg-pink-50 border border-pink-100 p-2.5 rounded-xl flex items-center gap-2 text-xs text-gray-800">
                 <span>📍</span>
@@ -1122,7 +1137,7 @@ export default function PropertyDetail() {
 
           {/* DESGLOSE GENERAL CON ICONOS Y BARRAS */}
           <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-10 text-xs text-gray-800 border-b border-gray-200 pb-8 items-end">
-            <div className="pr-4 border-r border-gray-200">
+            <div className="pr-4 border-r border-gray-200 col-span-2 md:col-span-1">
               <p className="font-semibold mb-2">Valoración general</p>
               <div className="space-y-1">
                 {[5, 4, 3, 2, 1].map((num) => (
@@ -1236,8 +1251,8 @@ export default function PropertyDetail() {
           <h2 className="text-xl font-semibold mb-2">A dónde irás</h2>
           <p className="text-sm text-gray-600 mb-6">{property.location}</p>
 
-          <div className="w-full h-[450px] rounded-3xl overflow-hidden border border-gray-200 shadow-sm relative group">
-            <div className="absolute top-4 left-4 z-10 bg-white shadow-md rounded-full px-4 py-2 flex items-center gap-2 border border-gray-100 text-xs text-gray-700 w-72">
+          <div className="w-full h-[350px] sm:h-[450px] rounded-3xl overflow-hidden border border-gray-200 shadow-sm relative group">
+            <div className="absolute top-4 left-4 z-10 bg-white shadow-md rounded-full px-4 py-2 flex items-center gap-2 border border-gray-100 text-xs text-gray-700 w-64 sm:w-72">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4 text-gray-400"
@@ -1303,7 +1318,7 @@ export default function PropertyDetail() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-            <div className="md:col-span-5 bg-white border border-gray-200 rounded-[24px] p-6 shadow-[0_6px_16px_rgba(0,0,0,0.08)] flex flex-col items-center text-center max-w-[380px]">
+            <div className="md:col-span-5 bg-white border border-gray-200 rounded-[24px] p-6 shadow-[0_6px_16px_rgba(0,0,0,0.08)] flex flex-col items-center text-center max-w-[380px] mx-auto md:mx-0">
               <div className="relative mb-4">
                 <img
                   src={property.hostAvatar}
@@ -1375,7 +1390,7 @@ export default function PropertyDetail() {
               <div className="pt-2">
                 <button
                   onClick={() => setShowMessageModal(true)}
-                  className="bg-[#F7F7F7] hover:bg-[#EBEBEB] text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl border border-black transition duration-200 shadow-none"
+                  className="bg-[#F7F7F7] hover:bg-[#EBEBEB] text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl border border-black transition duration-200 shadow-none w-full sm:w-auto"
                 >
                   Mensajea con el anfitrión
                 </button>
@@ -1452,6 +1467,30 @@ export default function PropertyDetail() {
           </div>
         </div>
 
+      </div>
+
+      {/* BARRA FLOTANTE INFERIOR DE RESERVA EN MÓVIL (MOBILE STICKY FOOTER) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3.5 z-40 flex items-center justify-between shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+        <div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-base font-bold text-gray-900">{property.price}</span>
+            <span className="text-xs text-gray-600 font-normal">/ noche</span>
+          </div>
+          <u 
+            onClick={() => scrollToSection("calendario")}
+            className="text-xs text-gray-700 font-semibold cursor-pointer block mt-0.5"
+          >
+            {checkIn && checkOut ? `${checkIn} - ${checkOut}` : "Seleccionar fechas"}
+          </u>
+        </div>
+
+        <button
+          onClick={handleReserve}
+          disabled={reserving}
+          className="bg-[#FF385C] hover:bg-[#e00b41] text-white font-semibold text-sm px-6 py-3 rounded-xl transition shadow-sm active:scale-95 disabled:opacity-50"
+        >
+          {reserving ? "Procesando..." : "Reserva"}
+        </button>
       </div>
     </main>
   );
