@@ -910,7 +910,7 @@ export default function PropertyDetail() {
                     Favorito<br />entre<br />huéspedes
                   </div>
                   <img
-                    src="/derecha.png"
+                    src="/derecha1.png"
                     alt="Ramita Derecha"
                     className="rama rama-derecha h-10 w-auto object-contain"
                   />
