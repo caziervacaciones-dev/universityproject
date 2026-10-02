@@ -257,7 +257,7 @@ export default function PropertyDetail() {
     { label: "Hospitalidad", count: 85, icon: "🤝" },
     { label: "Vista", count: 39, icon: "🏔️" },
     { label: "Familiar", count: 26, icon: "🏡" },
-    { label: "Espacios interiores", count: 18, icon: "🛋️" },
+    { label: "Espacios interiores", count: 18, icon: "🛋️️" },
     { label: "Jacuzzi", count: 9, icon: "♨️" },
     { label: "Limpieza", count: 22, icon: "✨" },
   ];
@@ -950,8 +950,8 @@ export default function PropertyDetail() {
           ))}
         </div>
 
-        {/* CONTADOR EN MÓVIL */}
-        <div className="md:hidden absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-10 pointer-events-none">
+        {/* CONTADOR EN MÓVIL (CORREGIDO: MÁS ESPACIADO INFERIOR PARA QUE NO LO CUBRA LA DIVISION) */}
+        <div className="md:hidden absolute bottom-8 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-30 pointer-events-none">
           {currentSlide + 1} / {property.images.length}
         </div>
 
@@ -986,7 +986,7 @@ export default function PropertyDetail() {
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
-      <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0">
+      <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-20 pt-6 md:mt-0 md:pt-0">
         {/* TITULO Y ACCIONES DESKTOP */}
         <div className="hidden md:flex justify-between items-start mb-4">
           <h1 className="text-2xl sm:text-[26px] font-semibold text-[#222222] tracking-tight">
@@ -1730,7 +1730,7 @@ export default function PropertyDetail() {
           >
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold text-gray-900 underline group-hover:text-black">
-                {property.price}
+                {totalPriceFormatted}
               </span>
             </div>
             <p className="text-[11px] text-gray-700 font-normal">
