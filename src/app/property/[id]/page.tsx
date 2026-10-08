@@ -3,6 +3,14 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { Inter } from "next/font/google";
+
+const airbnbFont = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-airbnb",
+  weight: ["400", "500", "600", "700"],
+});
 
 interface PropertyDetailData {
   title: string;
@@ -257,7 +265,7 @@ export default function PropertyDetail() {
     { label: "Hospitalidad", count: 85, icon: "🤝" },
     { label: "Vista", count: 39, icon: "🏔️" },
     { label: "Familiar", count: 26, icon: "🏡" },
-    { label: "Espacios interiores", count: 18, icon: "🛋️️" },
+    { label: "Espacios interiores", count: 18, icon: "🛋️" },
     { label: "Jacuzzi", count: 9, icon: "♨️" },
     { label: "Limpieza", count: 22, icon: "✨" },
   ];
@@ -559,14 +567,21 @@ export default function PropertyDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">
+      <div className={`${airbnbFont.variable} min-h-screen flex items-center justify-center text-gray-500 font-medium`} style={{ fontFamily: "var(--font-airbnb), Arial, Helvetica, sans-serif" }}>
         Cargando publicación...
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white text-[#222222] font-sans antialiased selection:bg-[#FF385C] selection:text-white relative pb-28 lg:pb-0">
+    <main className={`${airbnbFont.variable} min-h-screen bg-white text-[#222222] antialiased selection:bg-[#FF385C] selection:text-white relative pb-28 lg:pb-0`} style={{ fontFamily: "var(--font-airbnb), Arial, Helvetica, sans-serif" }}>
+      <style jsx global>{`
+        html, body {
+          font-family: var(--font-airbnb), Arial, Helvetica, sans-serif;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+      `}</style>
       {/* NOTIFICACIÓN AL COPIAR ENLACE */}
       {showShareToast && (
         <div className="fixed bottom-24 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
@@ -950,8 +965,8 @@ export default function PropertyDetail() {
           ))}
         </div>
 
-        {/* CONTADOR EN MÓVIL (CORREGIDO: MÁS ESPACIADO INFERIOR PARA QUE NO LO CUBRA LA DIVISION) */}
-        <div className="md:hidden absolute bottom-8 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-30 pointer-events-none">
+        {/* CONTADOR EN MÓVIL */}
+        <div className="md:hidden absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-10 pointer-events-none">
           {currentSlide + 1} / {property.images.length}
         </div>
 
@@ -986,7 +1001,7 @@ export default function PropertyDetail() {
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
-      <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-20 pt-6 md:mt-0 md:pt-0">
+      <div className="max-w-[1120px] mx-auto px-6 -mt-6 rounded-t-[32px] bg-white relative z-10 pt-6 md:mt-0 md:pt-0">
         {/* TITULO Y ACCIONES DESKTOP */}
         <div className="hidden md:flex justify-between items-start mb-4">
           <h1 className="text-2xl sm:text-[26px] font-semibold text-[#222222] tracking-tight">
@@ -1015,7 +1030,7 @@ export default function PropertyDetail() {
           <div className="lg:col-span-2 space-y-8">
             {/* SECCIÓN MÓVIL EXACTA AIRBNB */}
             <div className="border-b border-gray-200 pb-6 text-center md:text-left">
-              <h1 className="text-2xl font-bold text-[#222222] leading-tight mb-4">
+              <h1 className="text-2xl font-semibold text-[#222222] leading-tight mb-4">
                 {property.title}
               </h1>
               <p className="text-gray-500 text-sm md:text-base font-normal">
@@ -1031,7 +1046,7 @@ export default function PropertyDetail() {
               <div className="flex items-center justify-between sm:justify-center sm:gap-8">
                 {/* Puntuación */}
                 <div className="flex flex-col items-center px-2 sm:px-3">
-                  <span className="text-lg font-extrabold text-[#222222]">{property.rating}</span>
+                  <span className="text-lg font-semibold text-[#222222]">{property.rating}</span>
                   <div className="text-xs text-black">★★★★★</div>
                 </div>
 
@@ -1044,7 +1059,7 @@ export default function PropertyDetail() {
                     alt="Ramita Izquierda"
                     className="rama rama-izquierda h-10 w-auto object-contain"
                   />
-                  <div className="texto-favorito text-xs sm:text-sm font-extrabold text-[#222222] text-center leading-tight max-w-[110px]">
+                  <div className="texto-favorito text-xs sm:text-sm font-semibold text-[#222222] text-center leading-tight max-w-[110px]">
                     Favorito<br />entre<br />huéspedes
                   </div>
                   <img
@@ -1058,7 +1073,7 @@ export default function PropertyDetail() {
 
                 {/* Evaluaciones */}
                 <div className="evaluaciones-container flex flex-col items-center px-2 sm:px-3">
-                  <span className="numero text-lg font-extrabold text-[#222222]">{property.reviewsCount}</span>
+                  <span className="numero text-lg font-semibold text-[#222222]">{property.reviewsCount}</span>
                   <span className="label text-[11px] text-gray-500 underline font-medium">Evaluaciones</span>
                 </div>
               </div>
@@ -1291,7 +1306,7 @@ export default function PropertyDetail() {
 
               <div className="flex justify-between items-baseline">
                 <div>
-                  <span className="text-2xl font-bold text-gray-900">{property.price}</span>
+                  <span className="text-2xl font-semibold text-gray-900">{property.price}</span>
                   <span className="text-gray-600 text-xs font-normal"> / noche</span>
                 </div>
               </div>
@@ -1397,37 +1412,37 @@ export default function PropertyDetail() {
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Limpieza</p>
-              <p className="text-base font-bold my-1">4.9</p>
+              <p className="text-base font-semibold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.022.547l-1.02 1.02a2 2 0 000 2.828l1.02 1.02a2 2 0 002.828 0l1.02-1.02a2 2 0 00.547-1.022l.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.02-1.02a2 2 0 00-2.828 0l-1.02 1.02a2 2 0 000 2.828l1.02 1.02z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Exactitud</p>
-              <p className="text-base font-bold my-1">4.9</p>
+              <p className="text-base font-semibold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Check-in</p>
-              <p className="text-base font-bold my-1">4.9</p>
+              <p className="text-base font-semibold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Comunicación</p>
-              <p className="text-base font-bold my-1">5.0</p>
+              <p className="text-base font-semibold my-1">5.0</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Ubicación</p>
-              <p className="text-base font-bold my-1">4.9</p>
+              <p className="text-base font-semibold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
             </div>
 
             <div>
               <p className="font-semibold">Precio</p>
-              <p className="text-base font-bold my-1">4.8</p>
+              <p className="text-base font-semibold my-1">4.8</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
             </div>
           </div>
@@ -1729,11 +1744,11 @@ export default function PropertyDetail() {
             className="cursor-pointer group active:opacity-70 transition"
           >
             <div className="flex items-baseline gap-1">
-              <span className="text-lg font-bold text-gray-900 underline group-hover:text-black">
-                {totalPriceFormatted}
+              <span className="text-[17px] font-semibold text-gray-900 underline decoration-[1px] underline-offset-2 group-hover:text-black">
+                {property.price}
               </span>
             </div>
-            <p className="text-[11px] text-gray-700 font-normal">
+            <p className="text-[12px] text-gray-700 font-normal leading-4">
               {checkIn && checkOut 
                 ? `Por ${nightsCount} noche${nightsCount > 1 ? "s" : ""} · ${checkIn.split("-")[2]}–${checkOut.split("-")[2]} de oct`
                 : "Selecciona las fechas"}
@@ -1743,7 +1758,7 @@ export default function PropertyDetail() {
           <button
             onClick={handleReserve}
             disabled={reserving}
-            className="bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-bold text-base px-8 py-3 rounded-2xl transition shadow-md active:scale-95 disabled:opacity-50"
+            className="bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-semibold text-[15px] px-8 py-3 rounded-2xl transition shadow-md active:scale-95 disabled:opacity-50"
           >
             {reserving ? "Procesando..." : "Reservar"}
           </button>
