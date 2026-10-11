@@ -5,12 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Inter } from "next/font/google";
 
-const airbnbFont = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-airbnb",
-  weight: ["400", "500", "600", "700"],
-});
+const airbnbLikeFont = Inter({ subsets: ["latin"], display: "swap" });
 
 interface PropertyDetailData {
   title: string;
@@ -567,21 +562,14 @@ export default function PropertyDetail() {
 
   if (loading) {
     return (
-      <div className={`${airbnbFont.variable} min-h-screen flex items-center justify-center text-gray-500 font-medium`} style={{ fontFamily: "var(--font-airbnb), Arial, Helvetica, sans-serif" }}>
+      <div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">
         Cargando publicación...
       </div>
     );
   }
 
   return (
-    <main className={`${airbnbFont.variable} min-h-screen bg-white text-[#222222] antialiased selection:bg-[#FF385C] selection:text-white relative pb-28 lg:pb-0`} style={{ fontFamily: "var(--font-airbnb), Arial, Helvetica, sans-serif" }}>
-      <style jsx global>{`
-        html, body {
-          font-family: var(--font-airbnb), Arial, Helvetica, sans-serif;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-      `}</style>
+    <main className={`${airbnbLikeFont.className} min-h-screen bg-white text-[#222222] antialiased selection:bg-[#FF385C] selection:text-white relative pb-28 lg:pb-0`} style={{ fontFamily: `"Airbnb Cereal", "Circular", ${airbnbLikeFont.style.fontFamily}, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif` }}>
       {/* NOTIFICACIÓN AL COPIAR ENLACE */}
       {showShareToast && (
         <div className="fixed bottom-24 lg:bottom-6 right-6 z-50 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transition-all flex items-center gap-2">
@@ -1030,13 +1018,13 @@ export default function PropertyDetail() {
           <div className="lg:col-span-2 space-y-8">
             {/* SECCIÓN MÓVIL EXACTA AIRBNB */}
             <div className="border-b border-gray-200 pb-6 text-center md:text-left">
-              <h1 className="text-2xl font-semibold text-[#222222] leading-tight mb-4">
+              <h1 className="text-[27px] md:text-[26px] font-semibold text-[#222222] leading-[1.18] tracking-[-0.65px] mb-5">
                 {property.title}
               </h1>
-              <p className="text-gray-500 text-sm md:text-base font-normal">
+              <p className="text-[#717171] text-[15px] md:text-base font-normal leading-[1.45]">
                 {property.subtitle}
               </p>
-              <p className="text-gray-500 text-sm md:text-base font-normal mt-1">
+              <p className="text-[#717171] text-[15px] md:text-base font-normal leading-[1.45] mt-1">
                 {property.specs}
               </p>
             </div>
@@ -1306,7 +1294,7 @@ export default function PropertyDetail() {
 
               <div className="flex justify-between items-baseline">
                 <div>
-                  <span className="text-2xl font-semibold text-gray-900">{property.price}</span>
+                  <span className="text-2xl font-bold text-gray-900">{property.price}</span>
                   <span className="text-gray-600 text-xs font-normal"> / noche</span>
                 </div>
               </div>
@@ -1412,37 +1400,37 @@ export default function PropertyDetail() {
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Limpieza</p>
-              <p className="text-base font-semibold my-1">4.9</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.022.547l-1.02 1.02a2 2 0 000 2.828l1.02 1.02a2 2 0 002.828 0l1.02-1.02a2 2 0 00.547-1.022l.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.02-1.02a2 2 0 00-2.828 0l-1.02 1.02a2 2 0 000 2.828l1.02 1.02z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Exactitud</p>
-              <p className="text-base font-semibold my-1">4.9</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Check-in</p>
-              <p className="text-base font-semibold my-1">4.9</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Comunicación</p>
-              <p className="text-base font-semibold my-1">5.0</p>
+              <p className="text-base font-bold my-1">5.0</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             </div>
 
             <div className="pr-4 border-r border-gray-200">
               <p className="font-semibold">Ubicación</p>
-              <p className="text-base font-semibold my-1">4.9</p>
+              <p className="text-base font-bold my-1">4.9</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
             </div>
 
             <div>
               <p className="font-semibold">Precio</p>
-              <p className="text-base font-semibold my-1">4.8</p>
+              <p className="text-base font-bold my-1">4.8</p>
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
             </div>
           </div>
@@ -1597,7 +1585,7 @@ export default function PropertyDetail() {
                 </div>
               </div>
 
-              <h3 className="text-2xl font-extrabold text-[#222222]">{property.host}</h3>
+              <h3 className="text-2xl font-semibold text-[#222222]">{property.host}</h3>
               <p className="text-xs text-gray-500 font-normal mt-0.5">
                 Empecé a anfitrionar en 2022
               </p>
@@ -1729,26 +1717,26 @@ export default function PropertyDetail() {
       </div>
 
       {/* BARRA FLOTANTE INFERIOR DE RESERVA EN MÓVIL EXACTA A AIRBNB */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#DDDDDD] shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
         {/* ANUNCIO / AVISO DE OPORTUNIDAD ÚNICA */}
-        <div className="bg-[#EBEBEB] py-1.5 px-4 text-center text-[11px] font-medium text-[#222222] border-b border-gray-300 flex items-center justify-center gap-1.5">
-          <span>💎</span>
+        <div className="bg-[#F7F7F7] py-1.5 px-4 text-center text-[11px] font-medium text-[#222222] border-b border-[#EBEBEB] flex items-center justify-center gap-1.5">
+          <span aria-hidden="true">✦</span>
           <span>¡Oportunidad única! Este lugar suele estar reservado.</span>
         </div>
 
         {/* CONTENEDOR DE PRECIO Y BOTÓN DE RESERVA */}
-        <div className="px-5 py-3 flex items-center justify-between">
+        <div className="px-6 py-3.5 flex items-center justify-between gap-4">
           {/* HACIENDO CLIC AQUÍ ABRE EL MODAL DE DETALLES DE PRECIO */}
           <div 
             onClick={() => setShowPriceDetailsModal(true)}
             className="cursor-pointer group active:opacity-70 transition"
           >
             <div className="flex items-baseline gap-1">
-              <span className="text-[17px] font-semibold text-gray-900 underline decoration-[1px] underline-offset-2 group-hover:text-black">
+              <span className="text-[17px] font-semibold text-[#222222] underline decoration-[1px] underline-offset-2 group-hover:text-black">
                 {property.price}
               </span>
             </div>
-            <p className="text-[12px] text-gray-700 font-normal leading-4">
+            <p className="text-[14px] text-[#222222] font-normal leading-5 mt-1">
               {checkIn && checkOut 
                 ? `Por ${nightsCount} noche${nightsCount > 1 ? "s" : ""} · ${checkIn.split("-")[2]}–${checkOut.split("-")[2]} de oct`
                 : "Selecciona las fechas"}
@@ -1758,7 +1746,7 @@ export default function PropertyDetail() {
           <button
             onClick={handleReserve}
             disabled={reserving}
-            className="bg-gradient-to-r from-[#E81948] via-[#E31C5F] to-[#D70466] hover:opacity-95 text-white font-semibold text-[15px] px-8 py-3 rounded-2xl transition shadow-md active:scale-95 disabled:opacity-50"
+            className="bg-[#E00B5A] hover:bg-[#BD0050] text-white font-semibold text-[16px] px-8 py-[18px] min-w-[180px] rounded-full transition-colors shadow-none active:scale-[0.98] disabled:opacity-50"
           >
             {reserving ? "Procesando..." : "Reservar"}
           </button>
