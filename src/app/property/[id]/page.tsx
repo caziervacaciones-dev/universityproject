@@ -954,7 +954,7 @@ export default function PropertyDetail() {
         </div>
 
         {/* CONTADOR EN MÓVIL */}
-        <div className="md:hidden absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1 rounded-md z-10 pointer-events-none">
+        <div className="md:hidden absolute bottom-6 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-medium px-2.5 py-1.5 rounded-md z-30 pointer-events-none">
           {currentSlide + 1} / {property.images.length}
         </div>
 
